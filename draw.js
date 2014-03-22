@@ -5,13 +5,13 @@
 	var boxes=[];
 	var white = "#FFF";
 	var black = "#000";
-	var ratio = 0.25;
-	var updateFreqency = 10;
+	var innerRatio = 0.25;
+	var updateFreqency = 20;
 	var containerSize = 550;
 	var gridCount = 9; //MUST be an odd number!
 	var boxSize= Math.round(containerSize / gridCount);
-	var innerSize = Math.round(boxSize * ratio);
-	var padding = Math.round(innerSize * ratio);
+	var innerSize = Math.round(boxSize * innerRatio);
+	var padding = Math.round(innerSize * innerRatio);
 
 	//Init
 	(function(){
