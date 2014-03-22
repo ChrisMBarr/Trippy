@@ -1,25 +1,27 @@
 var canvas = document.getElementById("draw");
 var ctx = canvas.getContext("2d");
 var debug = false;
-
 var boxes=[];
+var white = "#FFF";
+var black = "#000";
+var ratio = 0.25;
+var updateFreqency = 10;
+var containerSize = 550;
+var gridCount = 9; //MUST be an odd number!
+var boxSize= Math.round(containerSize / gridCount);
+var innerSize = Math.round(boxSize * ratio);
+var padding = Math.round(innerSize * ratio);
 
-function drawBox(index, isOdd, drawInner, x, y, size){
-	var white = "#FFF";
-	var black = "#000";
-
-	var ratio = 0.25;
-	var ssize = Math.round(size * ratio);
-	var padding = Math.round(ssize * ratio);
-
+function drawBox(index, isOdd, drawInner, x, y){
+	//Add info about this box
 	boxes[index]={
 		box1:{},
 		box2:{},
 		corners: [
 			[x + padding, y + padding],
-			[x + size - ssize - padding, y + padding],
-			[x + size - ssize - padding, y + size - ssize - padding],
-			[x + padding, y + size - ssize - padding]
+			[x + boxSize - innerSize - padding, y + padding],
+			[x + boxSize - innerSize - padding, y + boxSize - innerSize - padding],
+			[x + padding, y + boxSize - innerSize - padding]
 		]
 	};
 
@@ -38,19 +40,19 @@ function drawBox(index, isOdd, drawInner, x, y, size){
 		//Alternate color
 		ctx.fillStyle = isOdd ? black : white;
 		//Position & size it
-		ctx.fillRect(x, y, size, size);
+		ctx.fillRect(x, y, boxSize, boxSize);
 
 		if(drawInner){
 			//Opposite color
 			ctx.fillStyle = isOdd ? white : black;
 			
-			moveBox(index, "box1", ssize);
-			moveBox(index, "box2", ssize);
+			moveInnerBox(index, "box1", innerSize);
+			moveInnerBox(index, "box2", innerSize);
 		}
-	}, 10);
+	}, updateFreqency);
 }
 
-function moveBox(index, key, size){
+function moveInnerBox(index, key, size){
 	var boxInfo = boxes[index];
 	var x = boxInfo[key].x;
 	var y = boxInfo[key].y;
@@ -81,14 +83,14 @@ function moveBox(index, key, size){
 	}
 }
 
-function drawCheckerboard(canvasSize, gridCount){
+function drawCheckerboard(){
 	//Set the size
-	canvas.width = canvasSize;
-	canvas.height = canvasSize;
+	canvas.width = containerSize;
+	canvas.height = containerSize;
 
 	//Setup box grid
 	var mid = (gridCount - 1) / 2;
-	var boxSize= Math.round(canvasSize / gridCount);
+	
 	var totalBoxes = gridCount * gridCount;
 	var row=0, col=0;
 	for (var i = 0; i < totalBoxes; i++) {
@@ -109,9 +111,4 @@ function drawCheckerboard(canvasSize, gridCount){
 	}
 }
 
-console.clear();
-
-//pass in square canvase size
-//then number of rows/columns of boxes
-//The 2nd param MUST be an odd number!
-drawCheckerboard(550, 9);
+drawCheckerboard();
