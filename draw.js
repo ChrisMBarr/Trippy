@@ -1,6 +1,6 @@
 var canvas = document.getElementById("draw");
 var ctx = canvas.getContext("2d");
-var debug = true;
+var debug = false;
 
 function drawBox(isOdd, drawInner, x, y, size){
 	var white = "#FFF";
@@ -10,8 +10,6 @@ function drawBox(isOdd, drawInner, x, y, size){
 	var ssize = Math.round(size * ratio);
 	var padding = Math.round(ssize * ratio);
 
-	//console.log(x, y, size, ssize, padding);
-
 	//define x,y points for each corner
 	var pos=[
 		[x + padding, y + padding],
@@ -19,10 +17,6 @@ function drawBox(isOdd, drawInner, x, y, size){
 		[x + size - ssize - padding, y + size - ssize - padding],
 		[x + padding, y + size - ssize - padding]
 	];
-
-	//console.log(pos);
-
-	//console.log(x, y, pos)
 
 	//initial box positions - in opposite corners
 	var box1x = pos[0][0];
@@ -43,7 +37,6 @@ function drawBox(isOdd, drawInner, x, y, size){
 			
 			ctx.fillRect(box1x, box1y, ssize, ssize);
 			//ctx.fillRect(box2x, box2y, ssize, ssize);
-			//ctx.fillRect(pos[3][0], pos[3][1], ssize, ssize);
 
 			if(debug){
 				//debug coordinates for each corner
@@ -67,7 +60,7 @@ function drawBox(isOdd, drawInner, x, y, size){
 			}else if(box1y <= pos[3][1] && box1y > pos[0][1]){
 				box1y--; //move BR to TR
 			}
-			
+
 			//box2x --;
 		}
 	}, 10);
@@ -105,4 +98,4 @@ console.clear();
 //pass in square canvase size
 //then number of rows/columns of boxes
 //The 2nd param MUST be an odd number!
-drawCheckerboard(500, 3);
+drawCheckerboard(500, 9);
