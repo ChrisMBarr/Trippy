@@ -1,5 +1,6 @@
 var canvas = document.getElementById("draw");
 var ctx = canvas.getContext("2d");
+var debug = true;
 
 function drawBox(isOdd, drawInner, x, y, size){
 	var white = "#FFF";
@@ -43,26 +44,30 @@ function drawBox(isOdd, drawInner, x, y, size){
 			ctx.fillRect(box1x, box1y, ssize, ssize);
 			//ctx.fillRect(box2x, box2y, ssize, ssize);
 			//ctx.fillRect(pos[3][0], pos[3][1], ssize, ssize);
-		
 
-			if(box1x >= pos[0][0] && box1x <= pos[1][0]){
-				box1x ++;
-				//console.log("one")
-			}else if(box1y >= pos[1][1] && box1y <= pos[2][1]){
-				box1y++;
-			}else if(box1x >= pos[2][0] && box1x <= pos[3][0]){
-				box1x --;
-			}else if(box1y >= pos[3][1]){
-				//box1y--;
-				//console.log("ELSE")
+			if(debug){
+				//debug coordinates for each corner
+				ctx.font="13px";
+				for (var i = 0; i < pos.length; i++) {
+					ctx.fillText(pos[i][0]+", "+pos[i][1], pos[i][0], pos[i][1]);
+				};		
+
+				//debug coordinates for moving box
+				ctx.fillStyle = isOdd ? black : white;
+				ctx.fillText("x: "+box1x, box1x+5, box1y+15);
+				ctx.fillText("y: "+box1y, box1x+5, box1y+25);
 			}
 
-			//console.log(box1x >= pos[2][0], box1x <= pos[3][0])
+			if(box1x >= pos[0][0] && box1x < pos[1][0] && box1y == pos[0][1]){
+				box1x ++; //move TL to TR
+			}else if(box1y >= pos[1][1] && box1y < pos[2][1] && box1x == pos[1][0]){
+				box1y++; //move TL to BL
+			}else if(box1x <= pos[2][0] && box1x > pos[3][0]){
+				box1x --; //move BL to BR
+			}else if(box1y <= pos[3][1] && box1y > pos[0][1]){
+				box1y--; //move BR to TR
+			}
 			
-			//debug coordinates
-			ctx.font="13px";
-			ctx.fillText(box1x+", "+box1y, x+size/2 - ssize/2, y+size/2);
-
 			//box2x --;
 		}
 	}, 10);
