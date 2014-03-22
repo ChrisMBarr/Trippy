@@ -1,3 +1,4 @@
+'strict';
 (function(){
 	var canvas = document.getElementById("draw");
 	var ctx = canvas.getContext("2d");
@@ -72,20 +73,19 @@
 			ctx.fillRect(x, y, boxSize, boxSize);
 
 			if(drawInner){
-				//Opposite color
-				ctx.fillStyle = isOdd ? white : black;
-				
-				moveInnerBox(index, "box1", innerSize);
-				moveInnerBox(index, "box2", innerSize);
+				moveInnerBox(index, "box1", innerSize, isOdd);
+				moveInnerBox(index, "box2", innerSize, isOdd);
 			}
 		}, updateFreqency);
 	}
 
-	function moveInnerBox(index, key, size){
+	function moveInnerBox(index, key, size, isOdd){
 		var boxInfo = boxes[index];
 		var x = boxInfo[key].x;
 		var y = boxInfo[key].y;
 		var pos = boxInfo.corners;
+
+		ctx.fillStyle = isOdd ? white : black;
 		ctx.fillRect(x, y, size, size);
 
 		if(debug){
@@ -93,17 +93,17 @@
 			ctx.font="13px";
 			for (var i = 0; i < pos.length; i++) {
 				ctx.fillText(pos[i][0]+", "+pos[i][1], pos[i][0], pos[i][1]);
-			};		
+			}
 
 			//debug coordinates for moving box
-			ctx.fillStyle = isOdd ? black : white;
+			ctx.fillStyle = isOdd ? black : white;;
 			ctx.fillText("x: "+x, x+5, y+15);
 			ctx.fillText("y: "+y, x+5, y+25);
 		}
 
-		if(x >= pos[0][0] && x < pos[1][0] && y == pos[0][1]){
+		if(x >= pos[0][0] && x < pos[1][0] && y === pos[0][1]){
 			boxInfo[key].x ++; //move TL to TR
-		}else if(y >= pos[1][1] && y < pos[2][1] && x == pos[1][0]){
+		}else if(y >= pos[1][1] && y < pos[2][1] && x === pos[1][0]){
 			boxInfo[key].y++; //move TL to BL
 		}else if(x <= pos[2][0] && x > pos[3][0]){
 			boxInfo[key].x--; //move BL to BR
