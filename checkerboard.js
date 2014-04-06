@@ -8,20 +8,27 @@
 	canvas.width = containerSize;
 	canvas.height = containerSize;
 	
-	var gridCount = 5; //MUST be an odd number!
-	
+	//Setup
+	var gridCount = 11; //MUST be an odd number!
+	var mid = (gridCount - 1) / 2;	
 	var debug = false;
 	var boxes=[];
 	var white = "#FFF";
 	var black = "#000";
-	var innerRatio = 0.25;
-	var updateFreqency = 20;
-	var mid = (gridCount - 1) / 2;
+	
+	//Box sizing
 	var totalBoxes = gridCount * gridCount;
 	var boxSize= Math.round(containerSize / gridCount);
+	var innerRatio = 0.25;
 	var innerSize = Math.round(boxSize * innerRatio);
 	var padding = Math.round(innerSize * innerRatio);
 
+	//Animation
+	var updateFreqency = 40;
+	var pauseDuration = 1000;
+	var sideAnimationDuration = boxSize - (padding*2) - innerSize +1;
+
+	//Create & setup initial boxes
 	var row=0, col=0;
 	for (var i = 0; i < totalBoxes; i++) {
 		//Reset every row
@@ -44,10 +51,13 @@
 		var isOdd = index % 2 === 0;
 		var drawInner = !(row === mid && col === mid);
 
-		console.log(row, col)
-
 		//Add info about this box
 		boxes[index]={
+			isCenter: row === mid || col === mid,
+			left: col<mid,
+			right: col>mid,
+			top: row<mid,
+			bottom: row>mid,
 			box1:{},
 			box2:{},
 			corners: [
@@ -58,19 +68,37 @@
 			]
 		};
 
+		var c1=0, c2=0;
+		if(boxes[index].isCenter){
+			if(boxes[index].top){
+				c1=2, c2=3;
+			}else if(boxes[index].right){
+				c1=3, c2=0;
+			}else if(boxes[index].bottom){
+				c1=0, c2=1;
+			}else if(boxes[index].left){
+				c1=1, c2=2;
+			}
+		}else{
+			if((boxes[index].top && boxes[index].left) || (boxes[index].bottom && boxes[index].right)){
+				c1=1, c2=3;
+			}else{
+				c1=0, c2=2;
+			}
+		}
+		
+
 		//initial box positions - in opposite corners
 		boxes[index].box1={
-			x: boxes[index].corners[0][0],
-			y: boxes[index].corners[0][1]
+			x: boxes[index].corners[c1][0],
+			y: boxes[index].corners[c1][1]
 		};
 		boxes[index].box2={
-			x: boxes[index].corners[2][0],
-			y: boxes[index].corners[2][1]
+			x: boxes[index].corners[c2][0],
+			y: boxes[index].corners[c2][1]
 		};
 
 		var life = 0;
-		var pauseDuration = 400;
-		var sideAnimationDuration = boxSize - (padding*2) - innerSize +1;
 		var timer = setInterval(_boxUpdater, updateFreqency);
 		_boxUpdater();
 
@@ -119,7 +147,7 @@
 		}
 
 		if(x >= pos[0][0] && x < pos[1][0] && y === pos[0][1]){
-			boxInfo[key].x ++; //move TL to TR
+			boxInfo[key].x++; //move TL to TR
 		}else if(y >= pos[1][1] && y < pos[2][1] && x === pos[1][0]){
 			boxInfo[key].y++; //move TL to BL
 		}else if(x <= pos[2][0] && x > pos[3][0]){
