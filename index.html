@@ -2,18 +2,57 @@
 <head>
 	<title>Canvas Test</title>
 	<style>
-		html,body{
-			margin:0;
-			padding: 0;
+		*{
+			box-sizing: border-box;
+		}
+		html,
+		body{
 			background-color: #EEE;
 		}
-		#draw{
-			
+		.half{
+			padding: 10px;
+			float: left;
 		}
+		.clear{clear:both;}
 	</style>
 </head>
 <body>
-	<canvas id="draw"></canvas>
+	<select id="js-show">
+		<option value="both">Show Both</option>
+		<option value="gif">Only Show the GIF</option>
+		<option value="canvas">Only Show the Canvas</option>
+	</select>
+	<hr>
+
+	<div class="half" id="gif">
+		<h2>Original .gif</h2>
+		<img src="checkerboard.gif" alt="" />	
+	</div>
+	
+	<div class="half" id="canvas">
+		<h2>Canvas animation</h2>
+		<canvas id="draw"></canvas>
+	</div>
+
+	<div class="clear"></div>
+	
+	<script>
+		var $$ = function(id){
+			return document.getElementById(id);
+		}
+		$$("js-show").onchange = function(){
+			if(this.value==='both'){
+				$$("gif").style.opacity = 1;
+				$$("canvas").style.opacity = 1;
+			}else if(this.value==='gif'){
+				$$("gif").style.opacity = 1;
+				$$("canvas").style.opacity = 0;
+			}else if(this.value==='canvas'){
+				$$("gif").style.opacity = 0;
+				$$("canvas").style.opacity = 1;
+			}
+		}
+	</script>
 	<script src="checkerboard.js"></script>
 </body>
 </html>
