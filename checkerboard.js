@@ -4,7 +4,7 @@
 	var ctx = canvas.getContext("2d");
 	
 	//Set the size
-	var containerSize = 550;
+	var containerSize = 500;
 	canvas.width = containerSize;
 	canvas.height = containerSize;
 	
@@ -18,7 +18,7 @@
 	//Box sizing
 	var totalBoxes = gridCount * gridCount;
 	var boxSize= Math.round(containerSize / gridCount);
-	var innerRatio = 0.25;
+	var innerRatio = 0.26;
 	var innerSize = Math.round(boxSize * innerRatio);
 	var padding = Math.round(innerSize * innerRatio);
 
@@ -67,6 +67,8 @@
 			]
 		};
 
+		//Derermine the starting corners for the inner boxes
+		//Depending on the position of the outer parent box
 		var c1=0, c2=0;
 		if(boxes[index].isCenter){
 			if(boxes[index].top){
@@ -86,7 +88,6 @@
 			}
 		}
 		
-
 		//initial box positions - in opposite corners
 		boxes[index].box1={
 			x: boxes[index].corners[c1][0],
