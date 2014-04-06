@@ -66,17 +66,34 @@
 			y: boxes[index].corners[2][1]
 		};
 
-		setInterval(function(){
-			//Alternate color
-			ctx.fillStyle = isOdd ? black : white;
-			//Position & size it
-			ctx.fillRect(x, y, boxSize, boxSize);
+		var life = 0;
+		var pauseDuration = 400;
+		var sideAnimationDuration = boxSize - (padding*2) - innerSize +1;
 
-			if(drawInner){
-				moveInnerBox(index, "box1", innerSize, isOdd);
-				moveInnerBox(index, "box2", innerSize, isOdd);
+		console.log(sideAnimationDuration, boxSize, padding, innerSize)
+
+		var timer = setInterval(_boxUpdater, updateFreqency);
+
+		function _boxUpdater(){
+			life++;
+			if(life % sideAnimationDuration === 0){
+				clearInterval(timer);
+				setTimeout(function(){
+					life=0;
+					timer = setInterval(_boxUpdater, updateFreqency);
+				}, pauseDuration)
+			}else{
+				//Alternate color
+				ctx.fillStyle = isOdd ? black : white;
+				//Position & size it
+				ctx.fillRect(x, y, boxSize, boxSize);
+
+				if(drawInner){
+					moveInnerBox(index, "box1", innerSize, isOdd);
+					moveInnerBox(index, "box2", innerSize, isOdd);
+				}
 			}
-		}, updateFreqency);
+		}
 	}
 
 	function moveInnerBox(index, key, size, isOdd){
