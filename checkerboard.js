@@ -2,48 +2,50 @@
 (function(){
 	var canvas = document.getElementById("draw");
 	var ctx = canvas.getContext("2d");
+	
+	//Set the size
+	var containerSize = 550;
+	canvas.width = containerSize;
+	canvas.height = containerSize;
+	
+	var gridCount = 5; //MUST be an odd number!
+	
 	var debug = false;
 	var boxes=[];
 	var white = "#FFF";
 	var black = "#000";
 	var innerRatio = 0.25;
 	var updateFreqency = 20;
-	var containerSize = 550;
-	var gridCount = 9; //MUST be an odd number!
+	var mid = (gridCount - 1) / 2;
+	var totalBoxes = gridCount * gridCount;
 	var boxSize= Math.round(containerSize / gridCount);
 	var innerSize = Math.round(boxSize * innerRatio);
 	var padding = Math.round(innerSize * innerRatio);
 
-	//Init
-	(function(){
-		//Set the size
-		canvas.width = containerSize;
-		canvas.height = containerSize;
-
-		//Skip the box in the very middle
-		var mid = (gridCount - 1) / 2;
-		
-		var totalBoxes = gridCount * gridCount;
-		var row=0, col=0;
-		for (var i = 0; i < totalBoxes; i++) {
-			//Reset every row
-			if(i % gridCount === 0){
-				row++;
-				col=0;
-			}
-			drawBox(
-				i,
-				i % 2 === 0,
-				!(row-1 === mid && col === mid),
-				Math.round(boxSize * col),
-				Math.round(boxSize * (row-1)),
-				boxSize
-			);
-			col++;
+	var row=0, col=0;
+	for (var i = 0; i < totalBoxes; i++) {
+		//Reset every row
+		if(i % gridCount === 0){
+			row++;
+			col=0;
 		}
-	})();
+		drawBox(
+			i,
+			row-1, //normalize row num
+			col,
+			Math.round(boxSize * col),
+			Math.round(boxSize * (row-1)),
+			boxSize
+		);
+		col++;
+	}
 
-	function drawBox(index, isOdd, drawInner, x, y){
+	function drawBox(index, row, col, x, y){
+		var isOdd = index % 2 === 0;
+		var drawInner = !(row === mid && col === mid);
+
+		console.log(row, col)
+
 		//Add info about this box
 		boxes[index]={
 			box1:{},
@@ -69,10 +71,8 @@
 		var life = 0;
 		var pauseDuration = 400;
 		var sideAnimationDuration = boxSize - (padding*2) - innerSize +1;
-
-		console.log(sideAnimationDuration, boxSize, padding, innerSize)
-
 		var timer = setInterval(_boxUpdater, updateFreqency);
+		_boxUpdater();
 
 		function _boxUpdater(){
 			life++;
