@@ -11,7 +11,6 @@
 	//Setup
 	var gridCount = 11; //MUST be an odd number!
 	var mid = (gridCount - 1) / 2;	
-	var debug = false;
 	var boxes=[];
 	var white = "#FFF";
 	var black = "#000";
@@ -132,19 +131,6 @@
 
 		ctx.fillStyle = isOdd ? white : black;
 		ctx.fillRect(x, y, size, size);
-
-		if(debug){
-			//debug coordinates for each corner
-			ctx.font="13px";
-			for (var i = 0; i < pos.length; i++) {
-				ctx.fillText(pos[i][0]+", "+pos[i][1], pos[i][0], pos[i][1]);
-			}
-
-			//debug coordinates for moving box
-			ctx.fillStyle = isOdd ? black : white;;
-			ctx.fillText("x: "+x, x+5, y+15);
-			ctx.fillText("y: "+y, x+5, y+25);
-		}
 
 		if(x >= pos[0][0] && x < pos[1][0] && y === pos[0][1]){
 			boxInfo[key].x++; //move TL to TR
