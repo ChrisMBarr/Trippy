@@ -6,15 +6,15 @@
 <body>
 	<a href="index.html">&laquo; back</a>
 	<select id="js-show">
-		<option value="both" selected>Show Both</option>
+		<option value="both">Show Both</option>
 		<option value="gif">Only Show the GIF</option>
-		<option value="canvas">Only Show the Canvas</option>
+		<option value="canvas" selected>Only Show the Canvas</option>
 	</select>
 	<hr>
 
 	<div class="half" id="gif">
 		<h2>Original .gif</h2>
-		<img src="checkerboard.gif" alt="" />	
+		<img src="negative-circles.gif" alt="" />	
 	</div>
 	
 	<div class="half" id="canvas">
@@ -42,6 +42,6 @@
 		}
 		$$("js-show").onchange();
 	</script>
-	<script src="checkerboard.js"></script>
+	<script src="negative-circles.js"></script>
 </body>
 </html>
